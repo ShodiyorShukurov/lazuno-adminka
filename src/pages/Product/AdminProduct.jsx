@@ -2,6 +2,7 @@ import AdminProductData from './data/AdminProduct';
 import ProductModal from './components/ProductModal';
 import Admin from '../../components/Admin';
 import UseProduct from '../../hooks/UseProduct';
+import UseCategory from '../../hooks/UseCategory';
 
 const AdminProduct = () => {
   const {
@@ -16,6 +17,8 @@ const AdminProduct = () => {
     currentPage,
     setCurrentPage,
   } = UseProduct();
+
+  const { popularData } = UseCategory();
 
   if (isLoading) {
     return (
@@ -33,6 +36,7 @@ const AdminProduct = () => {
         handleOpenModal={handleOpenModal}
         handleCancel={handleCancel}
         selectItem={selectItem}
+        popularData={popularData}
       />
 
       <AdminProductData

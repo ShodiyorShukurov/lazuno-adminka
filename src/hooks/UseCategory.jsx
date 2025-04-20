@@ -30,6 +30,11 @@ const UseCategory = () => {
     }
   };
 
+  const getPopularCategories = async () => {
+    const res = await Api.get(`/categories/filter?lang=`);
+    return res.data;
+  };
+
   const queryClient = useQueryClient();
 
   const openDeleteModal = (id) => {
@@ -54,6 +59,12 @@ const UseCategory = () => {
     queryFn: getCategory,
   });
 
+  const { data: popularData, isLoading: popularLoading } = useQuery({
+    queryKey: ['popularCategoryData'],
+    queryFn: getPopularCategories,
+  });
+
+
   return {
     data,
     isLoading,
@@ -65,6 +76,7 @@ const UseCategory = () => {
     selectItem,
     currentPage,
     setCurrentPage,
+    popularData
   };
 };
 

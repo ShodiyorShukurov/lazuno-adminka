@@ -14,17 +14,16 @@ import Api from '../../../api';
 import PropTypes from 'prop-types';
 import { useQueryClient } from '@tanstack/react-query';
 import TextArea from 'antd/es/input/TextArea';
-import UseCategory from '../../../hooks/UseCategory';
 
 const ProductModal = ({
   isOpen,
   handleOpenModal,
   handleCancel,
   selectItem,
+  popularData,
 }) => {
   const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
-  const { data } = UseCategory();
 
   React.useEffect(() => {
     if (isOpen && selectItem) {
@@ -32,10 +31,10 @@ const ProductModal = ({
         title: selectItem.title || '',
         description: selectItem.description || '',
         color: selectItem.color || '',
-        category_id: selectItem.category_id || data?.data?.[0]?.id,
+        category_id: selectItem.category_id || popularData[0]?.id,
       });
     }
-  }, [isOpen, selectItem, form, data]);
+  }, [isOpen, selectItem, form, popularData]);
 
   /** Upload props */
   const uploadProps = {
@@ -65,10 +64,7 @@ const ProductModal = ({
 
     try {
       if (selectItem.id) {
-        const response = await Api.put(
-          `/products/${selectItem.id}`,
-          formData
-        );
+        const response = await Api.put(`/products/${selectItem.id}`, formData);
 
         if (response.data) {
           message.success('Данные успешно обновлены!');
@@ -114,7 +110,12 @@ const ProductModal = ({
           <Form.Item
             label="Название"
             name="title"
-            rules={[{ required: true, message: 'П RUSSIAN: Пожалуйста, введите название!' }]}
+            rules={[
+              {
+                required: true,
+                message: 'П RUSSIAN: Пожалуйста, введите название!',
+              },
+            ]}
           >
             <Input />
           </Form.Item>
@@ -139,10 +140,12 @@ const ProductModal = ({
           <Form.Item
             label="Категория"
             name="category_id"
-            rules={[{ required: true, message: 'Пожалуйста, выберите категорию!' }]}
+            rules={[
+              { required: true, message: 'Пожалуйста, выберите категорию!' },
+            ]}
           >
             <Select
-              options={data?.data.map((item) => ({
+              options={popularData?.map((item) => ({
                 value: item?.id,
                 label: item?.title,
               }))}
