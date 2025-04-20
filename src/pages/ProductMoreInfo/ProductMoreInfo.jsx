@@ -3,7 +3,7 @@ import Admin from '../../components/Admin';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import Api from '../../api';
-import { Card, Tag, Image, Rate, Divider } from 'antd';
+import { Card, Tag, Image, Rate } from 'antd';
 
 const { Meta } = Card;
 
@@ -15,8 +15,8 @@ const ProductMoreInfo = () => {
     queryFn: () => Api.get('/products/admin/' + id),
   });
 
-  if (isPending) return 'Loading...';
-  if (error) return 'An error has occurred: ' + error.message;
+  if (isPending) return 'Загрузка...';
+  if (error) return 'Произошла ошибка: ' + error.message;
 
   const info = data.data.data;
 
@@ -69,8 +69,8 @@ const ProductMoreInfo = () => {
             </div>
           )}
 
-          <Tag color="blue">👁 {views} Views</Tag>
-          <Tag color="green">📝 {reviews.length} Reviews</Tag>
+          <Tag color="blue">👁 {views} Просмотров</Tag>
+          <Tag color="green">📝 {reviews.length} Отзывов</Tag>
           <Tag color={color}>🎨 {color}</Tag>
           <div className="text-sm text-gray-500">
             📅 {new Date(create_post_at).toLocaleDateString()}
@@ -78,7 +78,7 @@ const ProductMoreInfo = () => {
 
           {category && (
             <div className="border-t pt-4 mt-4">
-              <h4 className="text-md font-semibold mb-2">Kategoriya:</h4>
+              <h4 className="text-md font-semibold mb-2">Категория:</h4>
               <div className="flex items-center gap-4">
                 <Image
                   src={category.image_url}
@@ -88,9 +88,8 @@ const ProductMoreInfo = () => {
                   style={{ objectFit: 'cover', borderRadius: 8 }}
                 />
                 <div>
-                  <p className="font-medium text-lg">Title: {category.title}</p>
-                  <p className="font-medium text-lg">Lang: {category.lang}</p>
-
+                  <p className="font-medium text-lg">Название: {category.title}</p>
+                  <p className="font-medium text-lg">Язык: {category.lang}</p>
                   <p className="text-sm text-gray-500">
                     📅 {new Date(category.create_post_at).toLocaleDateString()}
                   </p>
@@ -101,7 +100,7 @@ const ProductMoreInfo = () => {
 
           {reviews.length > 0 && (
             <div className="mt-6 border-t pt-4">
-              <h4 className="text-md font-semibold mb-4">Sharhlar:</h4>
+              <h4 className="text-md font-semibold mb-4">Отзывы:</h4>
               {reviews.map((review, index) => (
                 <div
                   key={index}

@@ -28,15 +28,14 @@ const useReviews = () => {
     try {
       const res = await Api.delete('/reviews/' + id);
       if (res.data) {
-        message.success('Review successfully deleted!');
+        message.success('Отзыв успешно удален!');
         queryClient.invalidateQueries({ queryKey: ['reviews'] });
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.error('Axios error:', error.message);
+        console.error('Ошибка Axios:', error.message);
         message.error(
-          error.response?.data?.message ||
-            'An error occurred while deleting the review.'
+          error.response?.data?.message || 'Произошла ошибка при удалении отзыва.'
         );
       }
     }

@@ -39,12 +39,12 @@ const UseAdmin = () => {
     try {
       const res = await Api.delete('/users/' + id);
       if (res.data) {
-        message.success('User successfully deleted!');
+        message.success('Пользователь успешно удален!');
         queryClient.invalidateQueries({ queryKey: ['adminData'] });
       }
     } catch (error) {
       console.log(error);
-      message.error('An unknown error occurred while deleting the user.');
+      message.error('Произошла неизвестная ошибка при удалении пользователя.');
     }
   };
 

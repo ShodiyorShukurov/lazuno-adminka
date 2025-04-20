@@ -40,12 +40,12 @@ const UseProduct = () => {
     try {
       const res = await Api.delete('/products/' + id);
       if (res.data) {
-        message.success('Category successfully deleted!');
+        message.success('Продукт успешно удален!');
         queryClient.invalidateQueries({ queryKey: ['productData'] });
       }
     } catch (error) {
       console.log(error);
-      message.error('An unknown error occurred while deleting the category.');
+      message.error('Произошла неизвестная ошибка при удалении продукта.');
     }
   };
 

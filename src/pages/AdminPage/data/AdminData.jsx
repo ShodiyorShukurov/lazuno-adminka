@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Popconfirm,  Table } from 'antd';
+import { Button, Popconfirm, Table } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const App = ({
@@ -18,17 +18,17 @@ const App = ({
       render: (_, __, index) => index + 1,
     },
     {
-      title: 'Username',
+      title: 'Имя пользователя',
       dataIndex: 'username',
       key: 'username',
     },
     {
-      title: 'Role',
+      title: 'Роль',
       dataIndex: 'role',
       key: 'role',
     },
     {
-      title: 'Action',
+      title: 'Действия',
       dataIndex: 'action',
       key: 'action',
       align: 'center',
@@ -40,14 +40,14 @@ const App = ({
             variant="solid"
             onClick={() => handleOpenModal(record)}
           >
-            Edit
+            Редактировать
           </Button>
           <Popconfirm
-            title="Delete the task"
-            description="Are you sure to delete this task?"
+            title="Удалить задачу"
+            description="Вы уверены, что хотите удалить эту задачу?"
             onConfirm={handleDelete}
-            okText="Yes"
-            cancelText="No"
+            okText="Да"
+            cancelText="Нет"
           >
             <Button
               icon={<DeleteOutlined />}
@@ -55,7 +55,7 @@ const App = ({
               variant="solid"
               onClick={() => openDeleteModal(record.id)}
             >
-              Delete
+              Удалить
             </Button>
           </Popconfirm>
         </div>

@@ -25,7 +25,7 @@ const ProductModal = ({
   const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
   const { data } = UseCategory();
-console.log(selectItem)
+
   React.useEffect(() => {
     if (isOpen && selectItem) {
       form.setFieldsValue({
@@ -35,7 +35,7 @@ console.log(selectItem)
         category_id: selectItem.category_id || data?.data?.[0]?.id,
       });
     }
-  }, [isOpen, selectItem, form]);
+  }, [isOpen, selectItem, form, data]);
 
   /** Upload props */
   const uploadProps = {
@@ -54,12 +54,11 @@ console.log(selectItem)
 
   const onFinish = async (values) => {
     const imageArr = fileList?.map((i) => i.originFileObj);
-    console.log(imageArr);
     const formData = new FormData();
     formData.append('color', values.color);
     formData.append('title', values.title);
     formData.append('description', values.description);
-    formData.append('category_id ', values.category_id);
+    formData.append('category_id', Number(values.category_id));
     imageArr.forEach((file) => {
       formData.append('files', file);
     });
@@ -72,13 +71,13 @@ console.log(selectItem)
         );
 
         if (response.data) {
-          message.success('Data submitted successfully!');
+          message.success('Данные успешно обновлены!');
         }
       } else {
         const response = await Api.post('/products', formData);
 
         if (response.data) {
-          message.success('Data submitted successfully!');
+          message.success('Данные успешно добавлены!');
         }
       }
       setFileList([]);
@@ -87,20 +86,20 @@ console.log(selectItem)
       queryClient.invalidateQueries({ queryKey: ['productData'] });
     } catch (error) {
       message.error(
-        'There was an error submitting the data. Please try again.'
+        'Произошла ошибка при отправке данных. Пожалуйста, попробуйте снова.'
       );
-      console.error('Failed:', error);
+      console.error('Ошибка:', error);
     }
   };
 
   return (
     <>
       <Button type="primary" onClick={handleOpenModal}>
-        Add a Product
+        Добавить продукт
       </Button>
 
       <Modal
-        title="Add Picture"
+        title="Добавить продукт"
         open={isOpen}
         onCancel={handleCancel}
         style={{ top: 20 }}
@@ -113,34 +112,34 @@ console.log(selectItem)
           autoComplete="on"
         >
           <Form.Item
-            label="Title"
+            label="Название"
             name="title"
-            rules={[{ required: true, message: 'Please enter the title!' }]}
+            rules={[{ required: true, message: 'П RUSSIAN: Пожалуйста, введите название!' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="Description"
+            label="Описание"
             name="description"
             rules={[
-              { required: true, message: 'Please enter the description!' },
+              { required: true, message: 'Пожалуйста, введите описание!' },
             ]}
           >
             <TextArea />
           </Form.Item>
 
           <Form.Item
-            label="Color"
+            label="Цвет"
             name="color"
-            rules={[{ required: true, message: 'Please enter the color!' }]}
+            rules={[{ required: true, message: 'Пожалуйста, введите цвет!' }]}
           >
             <Input />
           </Form.Item>
 
           <Form.Item
-            label="Category Id"
+            label="Категория"
             name="category_id"
-            rules={[{ required: true, message: 'Please enter the category!' }]}
+            rules={[{ required: true, message: 'Пожалуйста, выберите категорию!' }]}
           >
             <Select
               options={data?.data.map((item) => ({
@@ -151,27 +150,27 @@ console.log(selectItem)
           </Form.Item>
 
           <Form.Item
-            label="Picture"
+            label="Изображение"
             name="attachment"
             rules={[
               {
                 required: selectItem?.image_url ? false : true,
-                message: 'Please upload a file!',
+                message: 'Пожалуйста, загрузите изображение!',
               },
             ]}
           >
             <Upload {...uploadProps} accept="image/*">
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              <Button icon={<UploadOutlined />}>Нажмите для загрузки</Button>
             </Upload>
           </Form.Item>
 
           <Form.Item>
             <Space size="large">
               <Button htmlType="submit" type="primary">
-                Submit
+                Отправить
               </Button>
               <Button type="primary" danger onClick={handleCancel}>
-                Cancel
+                Отмена
               </Button>
             </Space>
           </Form.Item>

@@ -41,13 +41,13 @@ const AdminModal = ({ isOpen, handleOpenModal, handleCancel, selectItem }) => {
         const response = await Api.put(`/users/${selectItem.id}`, data);
 
         if (response.data) {
-          message.success('Data submitted successfully!');
+          message.success('Данные успешно обновлены!');
         }
       } else {
         const response = await Api.post('/users/create/admin', data);
 
         if (response.data) {
-          message.success('Data submitted successfully!');
+          message.success('Данные успешно добавлены!');
         }
       }
       handleCancel();
@@ -55,22 +55,22 @@ const AdminModal = ({ isOpen, handleOpenModal, handleCancel, selectItem }) => {
       queryClient.invalidateQueries({ queryKey: ['adminData'] });
     } catch (error) {
       notification.error({
-        message: 'Error',
+        message: 'Ошибка',
         description:
-          'There was an error submitting the data. Please try again.',
+          'Произошла ошибка при отправке данных. Пожалуйста, попробуйте снова.',
       });
-      console.error('Failed:', error);
+      console.error('Ошибка:', error);
     }
   };
 
   return (
     <>
       <Button type="primary" onClick={handleOpenModal}>
-        Add a Admin
+        Добавить администратора
       </Button>
 
       <Modal
-        title="Add Admin"
+        title="Добавить администратора"
         open={isOpen}
         onCancel={handleCancel}
         style={{ top: 20 }}
@@ -83,20 +83,20 @@ const AdminModal = ({ isOpen, handleOpenModal, handleCancel, selectItem }) => {
           autoComplete="on"
         >
           <Form.Item
-            label="Username"
+            label="Имя пользователя"
             name="username"
-            rules={[{ required: true, message: 'Please enter the username!' }]}
+            rules={[{ required: true, message: 'Пожалуйста, введите имя пользователя!' }]}
           >
             <Input />
           </Form.Item>
 
           <Form.Item
-            label="Password"
+            label="Пароль"
             name="password"
             rules={[
               {
                 required: selectItem?.password ? false : true,
-                message: 'Please enter the password!',
+                message: 'Пожалуйста, введите пароль!',
               },
             ]}
           >
@@ -106,10 +106,10 @@ const AdminModal = ({ isOpen, handleOpenModal, handleCancel, selectItem }) => {
           <Form.Item>
             <Space size="large">
               <Button htmlType="submit" type="primary">
-                Submit
+                Отправить
               </Button>
               <Button type="primary" danger onClick={handleCancel}>
-                Cancel
+                Отмена
               </Button>
             </Space>
           </Form.Item>
@@ -123,7 +123,6 @@ AdminModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   handleOpenModal: PropTypes.func.isRequired,
   handleCancel: PropTypes.func.isRequired,
-  // refreshData: PropTypes.func.isRequired,
 };
 
 export default AdminModal;

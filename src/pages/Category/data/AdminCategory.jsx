@@ -10,7 +10,7 @@ const AdminCategory = ({
   return (
     <div className="admin_main">
       {data?.data?.length > 0 ? (
-        <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-[17px] mt-[48px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[17px] mt-[48px]">
           {data?.data?.map((item) => (
             <div
               key={item.id}
@@ -28,11 +28,11 @@ const AdminCategory = ({
                 className="absolute inset-0 z-0"
               ></div>
               <Popconfirm
-                title="Delete the task"
-                description="Are you sure to delete this task?"
+                title="Удалить категорию"
+                description="Вы уверены, что хотите удалить эту категорию?"
                 onConfirm={handleDelete}
-                okText="Yes"
-                cancelText="No"
+                okText="Да"
+                cancelText="Нет"
               >
                 <button
                   style={{ borderRadius: '7px' }}
@@ -56,11 +56,12 @@ const AdminCategory = ({
           ))}
         </div>
       ) : (
-        <p>Rasm yo&apos;q</p>
+        <p className="text-center mt-[20px] text-[24px] font-semibold">
+          Категории отсутствуют
+        </p>
       )}
     </div>
   );
 };
-
 
 export default AdminCategory;

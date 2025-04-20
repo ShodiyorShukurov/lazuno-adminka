@@ -7,8 +7,8 @@ import { notification } from 'antd';
 
 // Validation schema for form
 const validationSchema = Yup.object({
-  text: Yup.string().required('Loginni kiriting'),
-  password: Yup.string().required('Parolni kiriting'),
+  text: Yup.string().required('Введите логин'),
+  password: Yup.string().required('Введите пароль'),
 });
 
 const LoginPage = () => {
@@ -45,7 +45,7 @@ const LoginPage = () => {
         });
     } catch (error) {
       console.log(error);
-      notification.error({ message: 'Xatolik' });
+      notification.error({ message: 'Ошибка' });
     }
 
     setSubmitting(false);
@@ -60,7 +60,7 @@ const LoginPage = () => {
         className="card shadow p-4"
         style={{ width: '100%', maxWidth: '400px' }}
       >
-        <h2 className="text-center mb-4">Login</h2>
+        <h2 className="text-center mb-4">Вход</h2>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -70,17 +70,17 @@ const LoginPage = () => {
             <Form>
               <div className="mb-3">
                 <label htmlFor="text" className="form-label">
-                  Login
+                  Логин
                 </label>
                 <Field
                   type="text"
-                  id="text" // Change to text
-                  name="text" // Change to text
+                  id="text"
+                  name="text"
                   className="form-control"
-                  placeholder="Login"
+                  placeholder="Логин"
                 />
                 <ErrorMessage
-                  name="text" // Change to text
+                  name="text"
                   component="div"
                   className="text-danger"
                 />
@@ -88,14 +88,14 @@ const LoginPage = () => {
 
               <div className="mb-3">
                 <label htmlFor="password" className="form-label">
-                  Password
+                  Пароль
                 </label>
                 <Field
                   type="password"
                   id="password"
                   name="password"
                   className="form-control"
-                  placeholder="Password"
+                  placeholder="Пароль"
                   autoComplete="password"
                 />
                 <ErrorMessage
@@ -110,7 +110,7 @@ const LoginPage = () => {
                 className="btn btn-primary w-100"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Logging in...' : 'Login'}
+                {isSubmitting ? 'Вход...' : 'Войти'}
               </button>
             </Form>
           )}

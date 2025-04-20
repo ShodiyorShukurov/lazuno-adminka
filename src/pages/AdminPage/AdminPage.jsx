@@ -18,13 +18,13 @@ const AdminPage = () => {
     currentPage,
   } = UseAdmin();
 
-  //   if (isLoading) {
-  //     return (
-  //       <Admin>
-  //         <p>Loading...</p>
-  //       </Admin>
-  //     );
-  //   }
+  if (isLoading) {
+    return (
+      <Admin>
+        <p>Загрузка...</p>
+      </Admin>
+    );
+  }
 
   return (
     <Admin>
@@ -34,14 +34,6 @@ const AdminPage = () => {
         handleCancel={handleCancel}
         selectItem={selectItem}
       />
-
-      {/* <CarouselData
-        data={data}
-        openDeleteModal={openDeleteModal}
-        closeDeleteModal={closeDeleteModal}
-        handleDelete={handleDelete}
-        handleOpenModal={handleOpenModal}
-      /> */}
       <AdminData
         data={data}
         setCurrentPage={setCurrentPage}

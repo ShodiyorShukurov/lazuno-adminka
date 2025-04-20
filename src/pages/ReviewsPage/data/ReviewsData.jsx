@@ -2,8 +2,8 @@ import { Table, Button, Checkbox, Popconfirm } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 
-const ReviewsData = ({ openDeleteModal, handleDelete, data }) => {
-  console.log(data);
+const ReviewsData = ({ openDeleteModal, handleDelete, data, setCurrentPage, currentPage }) => {
+
   const reviewData =
     data?.data?.length > 0
       ? data.data.map((review) => ({
@@ -18,39 +18,39 @@ const ReviewsData = ({ openDeleteModal, handleDelete, data }) => {
 
   const columns = [
     {
-      title: 'ID',
+      title: '№',
       dataIndex: 'id',
       key: 'id',
       align: 'center',
     },
     {
-      title: 'Name',
+      title: 'Название',
       dataIndex: 'name',
       key: 'name',
       align: 'center',
     },
     {
-      title: 'Email',
+      title: 'Электронная почта',
       dataIndex: 'email',
       key: 'email',
       align: 'center',
       render: (email) => <a href={`mailto:${email}`}>{email}</a>,
     },
     {
-      title: 'Title',
+      title: 'Титул',
       dataIndex: 'title',
       key: 'title',
       align: 'center',
     },
     {
-      title: 'Text',
+      title: 'Текст',
       dataIndex: 'text',
       key: 'text',
       align: 'center',
     },
 
     {
-      title: 'Stars',
+      title: 'Звезды',
       key: 'stars',
       dataIndex: 'stars',
       align: 'center',
@@ -60,8 +60,8 @@ const ReviewsData = ({ openDeleteModal, handleDelete, data }) => {
       key: 'actions',
       render: (_, record) => (
         <Popconfirm
-          title="Delete the task"
-          description="Are you sure to delete this task?"
+          title="Удалить задачу"
+          description="Вы уверены, что хотите удалить эту задачу?"
           onConfirm={handleDelete}
           okText="Yes"
           cancelText="No"
@@ -72,7 +72,7 @@ const ReviewsData = ({ openDeleteModal, handleDelete, data }) => {
             icon={<DeleteOutlined />}
             onClick={() => openDeleteModal(record.id)}
           >
-            Delete
+            Удалить
           </Button>
         </Popconfirm>
       ),
@@ -86,7 +86,12 @@ const ReviewsData = ({ openDeleteModal, handleDelete, data }) => {
         columns={columns}
         dataSource={reviewData}
         rowKey="id"
-        pagination={false}
+        pagination={{
+          current: currentPage,
+          pageSize: 10,
+          total: data?.total,
+          onChange: (page) => setCurrentPage(page),
+        }}
       />
     </div>
   );

@@ -40,12 +40,12 @@ const UseCategory = () => {
     try {
       const res = await Api.delete('/categories/' + id);
       if (res.data) {
-        message.success('Category successfully deleted!');
+        message.success('Категория успешно удалена!');
         queryClient.invalidateQueries({ queryKey: ['categoryData'] });
       }
     } catch (error) {
       console.log(error);
-      message.error('An unknown error occurred while deleting the category.');
+      message.error('Произошла неизвестная ошибка при удалении категории.');
     }
   };
 

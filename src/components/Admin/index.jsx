@@ -36,7 +36,7 @@ const Admin = ({ children }) => {
   const logOut = () => {
     localStorage.clear(API_TOKEN);
     localStorage.clear(ROLE);
-    navigate('/login')
+    navigate('/login');
   };
 
   return (
@@ -44,15 +44,16 @@ const Admin = ({ children }) => {
       <Sider
         trigger={
           <Popconfirm
-           placement="topRight"
-            title="Log Out"
-            description="Do you want to leave the page?"
+            placement="topRight"
+            title="Выход"
+            description="Хотите покинуть страницу?"
             onConfirm={logOut}
-            okText="Yes"
-            cancelText="No"
+            okText="Да"
+            cancelText="Нет"
           >
             <div className="bg-white text-black flex justify-start items-center gap-3 pb-4 pl-4">
-              <Avatar icon={<UserOutlined />} /> <b>superadmin </b>
+              <Avatar icon={<UserOutlined />} />{' '}
+              <b>{localStorage.getItem('admin_role')}</b>
               <LoginOutlined />
             </div>
           </Popconfirm>
@@ -88,23 +89,23 @@ const Admin = ({ children }) => {
               ? {
                   key: '/admin',
                   icon: <UserOutlined />,
-                  label: 'Admin List',
+                  label: 'Список администраторов',
                 }
               : null,
             {
               key: '/category',
               icon: <PartitionOutlined />,
-              label: 'Categories',
+              label: 'Категории',
             },
             {
               key: '/product',
               icon: <ProductOutlined />,
-              label: 'Product',
+              label: 'Продукты',
             },
             {
               key: '/reviews',
               icon: <CommentOutlined />,
-              label: 'Reviews',
+              label: 'Отзывы',
             },
           ]}
         />

@@ -19,6 +19,7 @@ const CategoryModal = ({
   handleOpenModal,
   handleCancel,
   selectItem,
+  isLoading,
 }) => {
   const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
@@ -27,7 +28,7 @@ const CategoryModal = ({
     if (isOpen && selectItem) {
       form.setFieldsValue({
         title: selectItem.title || '',
-        lang: selectItem.lang || 'en',
+        lang: selectItem.lang || 'ru', // Default to Russian for consistency
       });
     }
   }, [isOpen, selectItem, form]);
@@ -35,25 +36,12 @@ const CategoryModal = ({
   /** Upload props */
   const uploadProps = {
     beforeUpload: (file) => {
-      // if (file && typeof file.size === "number") {
-      //   const isLt10M = file.size / 1024 / 1024 < 10; // 10MB
-      //   if (!isLt10M) {
-      //     message.error(`${file.name} must be less than 10MB!`);
-      //     return Upload.LIST_IGNORE;
-      //   }
-      // } else {
-      //   message.error("Error determining file size.");
-      //   return Upload.LIST_IGNORE;
-      // }
-
       if (fileList.length >= 1) {
-        message.error('Only one file can be uploaded!');
+        message.error('Можно загрузить только один файл!');
         return Upload.LIST_IGNORE;
       }
-
-      // Update the file list state
       setFileList([file]);
-      return false; // Prevent auto upload
+      return false;
     },
     fileList,
     onChange: (info) => {
@@ -80,13 +68,13 @@ const CategoryModal = ({
         );
 
         if (response.data) {
-          message.success('Data submitted successfully!');
+          message.success('Данные успешно обновлены!');
         }
       } else {
         const response = await Api.post('/categories', formData);
 
         if (response.data) {
-          message.success('Data submitted successfully!');
+          message.success('Данные успешно добавлены!');
         }
       }
       setFileList([]);
@@ -95,20 +83,20 @@ const CategoryModal = ({
       queryClient.invalidateQueries({ queryKey: ['categoryData'] });
     } catch (error) {
       message.error(
-        'There was an error submitting the data. Please try again.'
+        'Произошла ошибка при отправке данных. Пожалуйста, попробуйте снова.'
       );
-      console.error('Failed:', error);
+      console.error('Ошибка:', error);
     }
   };
 
   return (
     <>
       <Button type="primary" onClick={handleOpenModal}>
-        Add a Category
+        Добавить категорию
       </Button>
 
       <Modal
-        title="Add Picture"
+        title="Добавить категорию"
         open={isOpen}
         onCancel={handleCancel}
         style={{ top: 20 }}
@@ -121,47 +109,47 @@ const CategoryModal = ({
           autoComplete="on"
         >
           <Form.Item
-            label="Title"
+            label="Название"
             name="title"
-            rules={[{ required: true, message: 'Please enter the title!' }]}
+            rules={[{ required: true, message: 'Пожалуйста, введите название!' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="Language"
+            label="Язык"
             name="lang"
-            rules={[{ required: true, message: 'Please choose a language!' }]}
+            rules={[{ required: true, message: 'Пожалуйста, выберите язык!' }]}
           >
             <Select
               options={[
-                { value: 'en', label: 'English' },
-                { value: 'ru', label: 'Russian' },
-                { value: 'uz', label: 'Uzbek' },
+                { value: 'en', label: 'Английский' },
+                { value: 'ru', label: 'Русский' },
+                { value: 'uz', label: 'Узбекский' },
               ]}
             />
           </Form.Item>
           <Form.Item
-            label="Picture"
+            label="Изображение"
             name="attachment"
             rules={[
               {
                 required: selectItem?.image_url ? false : true,
-                message: 'Please upload a file!',
+                message: 'Пожалуйста, загрузите изображение!',
               },
             ]}
           >
             <Upload {...uploadProps} accept="image/*">
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              <Button icon={<UploadOutlined />}>Нажмите для загрузки</Button>
             </Upload>
           </Form.Item>
 
           <Form.Item>
             <Space size="large">
-              <Button htmlType="submit" type="primary">
-                Submit
+              <Button htmlType="submit" type="primary" disabled={isLoading}>
+                Отправить
               </Button>
               <Button type="primary" danger onClick={handleCancel}>
-                Cancel
+                Отмена
               </Button>
             </Space>
           </Form.Item>
@@ -175,7 +163,6 @@ CategoryModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   handleOpenModal: PropTypes.func.isRequired,
   handleCancel: PropTypes.func.isRequired,
-  // refreshData: PropTypes.func.isRequired,
 };
 
 export default CategoryModal;

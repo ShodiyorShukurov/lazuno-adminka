@@ -19,13 +19,13 @@ const AdminProduct = ({
       render: (_, __, index) => index + 1,
     },
     {
-      title: 'Title',
+      title: 'Название',
       dataIndex: 'title',
       key: 'title',
       align: 'center',
     },
     {
-      title: 'Description',
+      title: 'Описание',
       dataIndex: 'description',
       key: 'description',
       align: 'center',
@@ -36,31 +36,31 @@ const AdminProduct = ({
       ),
     },
     {
-      title: 'Color',
+      title: 'Цвет',
       dataIndex: 'color',
       key: 'color',
       align: 'center',
     },
     {
-      title: 'Views',
+      title: 'Просмотры',
       dataIndex: 'views',
       key: 'views',
       align: 'center',
     },
     {
-      title: 'Image_url',
+      title: 'Изображение',
       dataIndex: 'image_url',
       key: 'image_url',
       align: 'center',
       render: (image_url) =>
         image_url.length > 0 ? (
-          <Image width={100} src={image_url[0]} />
+          <Image width={100} height={100} src={image_url[0]} />
         ) : (
-          'Image not found'
+          'Изображение не найдено'
         ),
     },
     {
-      title: 'Action',
+      title: 'Действия',
       dataIndex: 'action',
       key: 'action',
       align: 'center',
@@ -72,7 +72,7 @@ const AdminProduct = ({
             variant="link"
             onClick={() => navigate('/product/' + record.id)}
           >
-            More Info
+            Подробнее
           </Button>
           <Button
             icon={<EditOutlined />}
@@ -80,14 +80,14 @@ const AdminProduct = ({
             variant="solid"
             onClick={() => handleOpenModal(record)}
           >
-            Edit
+            Редактировать
           </Button>
           <Popconfirm
-            title="Delete the task"
-            description="Are you sure to delete this task?"
+            title="Удалить продукт"
+            description="Вы уверены, что хотите удалить этот продукт?"
             onConfirm={handleDelete}
-            okText="Yes"
-            cancelText="No"
+            okText="Да"
+            cancelText="Нет"
           >
             <Button
               icon={<DeleteOutlined />}
@@ -95,7 +95,7 @@ const AdminProduct = ({
               variant="solid"
               onClick={() => openDeleteModal(record.id)}
             >
-              Delete
+              Удалить
             </Button>
           </Popconfirm>
         </div>
@@ -110,10 +110,10 @@ const AdminProduct = ({
       dataSource={dataSource}
       rowKey="id"
       pagination={{
-          current: currentPage,
-          pageSize: 10,
+        current: currentPage,
+        pageSize: 10,
         total: data?.total,
-          onChange: (page) => setCurrentPage(page),
+        onChange: (page) => setCurrentPage(page),
       }}
     />
   );
