@@ -32,6 +32,7 @@ const ProductModal = ({
         description: selectItem.description || '',
         color: selectItem.color || '',
         category_id: selectItem.category_id || popularData[0]?.id,
+        layout: selectItem?.layout || ''
       });
     }
   }, [isOpen, selectItem, form, popularData]);
@@ -57,6 +58,7 @@ const ProductModal = ({
     formData.append('color', values.color);
     formData.append('title', values.title);
     formData.append('description', values.description);
+    formData.append('layout', values.layout);
     formData.append('category_id', Number(values.category_id));
     imageArr.forEach((file) => {
       formData.append('files', file);
@@ -127,6 +129,14 @@ const ProductModal = ({
             ]}
           >
             <TextArea />
+          </Form.Item>
+
+          <Form.Item
+            label="Планировка"
+            name="layout"
+            rules={[{ required: true, message: 'Пожалуйста, введите планировка!' }]}
+          >
+            <Input />
           </Form.Item>
 
           <Form.Item

@@ -48,6 +48,15 @@ const AdminProduct = ({
       align: 'center',
     },
     {
+      title: 'Layout',
+      dataIndex: 'layout',
+      key: 'layout',
+      align: 'center',
+      render: (layout) => (
+        <span>{layout?.length > 10 ? layout?.slice(0, 10) : layout}</span>
+      ),
+    },
+    {
       title: 'Изображение',
       dataIndex: 'image_url',
       key: 'image_url',

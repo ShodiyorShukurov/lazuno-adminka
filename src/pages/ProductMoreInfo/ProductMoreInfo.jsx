@@ -31,6 +31,7 @@ const ProductMoreInfo = () => {
     create_post_at,
     image_url,
     category,
+    layout
   } = info;
 
   return (
@@ -72,6 +73,7 @@ const ProductMoreInfo = () => {
           <Tag color="blue">👁 {views} Просмотров</Tag>
           <Tag color="green">📝 {reviews.length} Отзывов</Tag>
           <Tag color={color}>🎨 {color}</Tag>
+          <p className='mt-2'>Планировка: {layout}</p>
           <div className="text-sm text-gray-500">
             📅 {new Date(create_post_at).toLocaleDateString()}
           </div>
