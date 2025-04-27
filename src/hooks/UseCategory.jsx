@@ -21,7 +21,7 @@ const UseCategory = () => {
 
   const getCategory = async () => {
     try {
-      const res = await Api.get(`/categories/list?take=10&page=${currentPage}`);
+      const res = await Api.get(`/categories/list?take=5&page=${currentPage}`);
 
       return res.data;
     } catch (error) {

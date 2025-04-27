@@ -4,6 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 import { API_PATH, API_TOKEN, ROLE } from '../utils/constants';
 import { notification } from 'antd';
+import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import { useState } from 'react';
 
 // Validation schema for form
 const validationSchema = Yup.object({
@@ -13,6 +15,8 @@ const validationSchema = Yup.object({
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const [type, setType] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialValues = {
     text: '',
@@ -20,6 +24,7 @@ const LoginPage = () => {
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
+    setIsLoading(true);
     try {
       fetch(API_PATH + '/users/login', {
         method: 'POST',
@@ -34,6 +39,7 @@ const LoginPage = () => {
         .then((response) => response.json())
         .then((data) => {
           if (data.token) {
+            setIsLoading(false);
             localStorage.setItem(API_TOKEN, data.token);
             localStorage.setItem(ROLE, data.user.role);
             if (localStorage.getItem(ROLE) === 'superadmin') {
@@ -44,6 +50,7 @@ const LoginPage = () => {
           }
         });
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
       notification.error({ message: 'Ошибка' });
     }
@@ -86,18 +93,25 @@ const LoginPage = () => {
                 />
               </div>
 
-              <div className="mb-3">
+              <div className="mb-3 relative">
                 <label htmlFor="password" className="form-label">
                   Пароль
                 </label>
                 <Field
-                  type="password"
+                  type={type ? 'text' : 'password'}
                   id="password"
                   name="password"
                   className="form-control"
                   placeholder="Пароль"
                   autoComplete="password"
                 />
+                <button
+                  onClick={() => setType(!type)}
+                  type="button"
+                  className="absolute top-9.5 right-3"
+                >
+                  {type ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+                </button>
                 <ErrorMessage
                   name="password"
                   component="div"
@@ -108,9 +122,9 @@ const LoginPage = () => {
               <button
                 type="submit"
                 className="btn btn-primary w-100"
-                disabled={isSubmitting}
+                disabled={isLoading}
               >
-                {isSubmitting ? 'Вход...' : 'Войти'}
+                {isLoading ? 'Вход...' : 'Войти'}
               </button>
             </Form>
           )}

@@ -24,6 +24,7 @@ const ProductModal = ({
 }) => {
   const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
   React.useEffect(() => {
     if (isOpen && selectItem) {
@@ -32,7 +33,7 @@ const ProductModal = ({
         description: selectItem.description || '',
         color: selectItem.color || '',
         category_id: selectItem.category_id || popularData[0]?.id,
-        layout: selectItem?.layout || ''
+        layout: selectItem?.layout || '',
       });
     }
   }, [isOpen, selectItem, form, popularData]);
@@ -53,6 +54,7 @@ const ProductModal = ({
   const queryClient = useQueryClient();
 
   const onFinish = async (values) => {
+    setIsLoading(true);
     const imageArr = fileList?.map((i) => i.originFileObj);
     const formData = new FormData();
     formData.append('color', values.color);
@@ -69,12 +71,14 @@ const ProductModal = ({
         const response = await Api.put(`/products/${selectItem.id}`, formData);
 
         if (response.data) {
+          setIsLoading(false);
           message.success('Данные успешно обновлены!');
         }
       } else {
         const response = await Api.post('/products', formData);
 
         if (response.data) {
+          setIsLoading(false);
           message.success('Данные успешно добавлены!');
         }
       }
@@ -83,6 +87,7 @@ const ProductModal = ({
       form.resetFields();
       queryClient.invalidateQueries({ queryKey: ['productData'] });
     } catch (error) {
+      setIsLoading(false);
       message.error(
         'Произошла ошибка при отправке данных. Пожалуйста, попробуйте снова.'
       );
@@ -134,7 +139,9 @@ const ProductModal = ({
           <Form.Item
             label="Планировка"
             name="layout"
-            rules={[{ required: true, message: 'Пожалуйста, введите планировка!' }]}
+            rules={[
+              { required: true, message: 'Пожалуйста, введите планировка!' },
+            ]}
           >
             <Input />
           </Form.Item>
@@ -179,7 +186,7 @@ const ProductModal = ({
 
           <Form.Item>
             <Space size="large">
-              <Button htmlType="submit" type="primary">
+              <Button htmlType="submit" type="primary" disabled={isLoading}>
                 Отправить
               </Button>
               <Button type="primary" danger onClick={handleCancel}>

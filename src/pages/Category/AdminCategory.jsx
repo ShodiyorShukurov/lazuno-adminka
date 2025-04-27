@@ -47,7 +47,7 @@ const AdminCategory = () => {
       <Pagination
       style={{marginTop: "10px"}}
         align="end"
-        pageSize={10}
+        pageSize={5}
         current={currentPage}
         defaultCurrent={1}
         total={data.total}

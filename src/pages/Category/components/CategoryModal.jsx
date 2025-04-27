@@ -19,16 +19,16 @@ const CategoryModal = ({
   handleOpenModal,
   handleCancel,
   selectItem,
-  isLoading,
 }) => {
   const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
   React.useEffect(() => {
     if (isOpen && selectItem) {
       form.setFieldsValue({
         title: selectItem.title || '',
-        lang: selectItem.lang || 'ru', // Default to Russian for consistency
+        lang: selectItem.lang || 'ru',
       });
     }
   }, [isOpen, selectItem, form]);
@@ -52,12 +52,13 @@ const CategoryModal = ({
   const queryClient = useQueryClient();
 
   const onFinish = async (values) => {
+    setIsLoading(true);
     const formData = new FormData();
     formData.append('title', values.title);
     formData.append('lang', values.lang);
     formData.append(
       'image',
-      selectItem?.image_url ? '' : fileList[0].originFileObj
+      fileList[0]?.originFileObj ? fileList[0].originFileObj : ''
     );
 
     try {
@@ -68,12 +69,14 @@ const CategoryModal = ({
         );
 
         if (response.data) {
+          setIsLoading(false);
           message.success('Данные успешно обновлены!');
         }
       } else {
         const response = await Api.post('/categories', formData);
 
         if (response.data) {
+          setIsLoading(false);
           message.success('Данные успешно добавлены!');
         }
       }
@@ -82,6 +85,7 @@ const CategoryModal = ({
       form.resetFields();
       queryClient.invalidateQueries({ queryKey: ['categoryData'] });
     } catch (error) {
+      setIsLoading(false);
       message.error(
         'Произошла ошибка при отправке данных. Пожалуйста, попробуйте снова.'
       );
@@ -111,7 +115,9 @@ const CategoryModal = ({
           <Form.Item
             label="Название"
             name="title"
-            rules={[{ required: true, message: 'Пожалуйста, введите название!' }]}
+            rules={[
+              { required: true, message: 'Пожалуйста, введите название!' },
+            ]}
           >
             <Input />
           </Form.Item>
