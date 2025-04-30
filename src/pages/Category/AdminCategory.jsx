@@ -3,6 +3,7 @@ import CarouselData from './data/AdminCategory';
 import CategoryModal from './components/CategoryModal';
 import Admin from '../../components/Admin';
 import UseCategory from '../../hooks/UseCategory';
+import CategoryModalEdit from './components/CategoryModalEdit';
 
 const AdminCategory = () => {
   const {
@@ -16,6 +17,9 @@ const AdminCategory = () => {
     selectItem,
     currentPage,
     setCurrentPage,
+    isOpenEdit,
+    setIsOpenEdit,
+    setIsOpen,
   } = UseCategory();
 
   if (isLoading) {
@@ -31,8 +35,7 @@ const AdminCategory = () => {
       <h2>Все категории ({data?.total})</h2>
       <CategoryModal
         isOpen={isOpen}
-        handleOpenModal={handleOpenModal}
-        handleCancel={handleCancel}
+        setIsOpen={setIsOpen}
         selectItem={selectItem}
         isLoading={isLoading}
       />
@@ -44,8 +47,15 @@ const AdminCategory = () => {
         handleOpenModal={handleOpenModal}
       />
 
+      <CategoryModalEdit
+        isOpenEdit={isOpenEdit}
+        setIsOpenEdit={setIsOpenEdit}
+        handleCancel={handleCancel}
+        selectItem={selectItem}
+      />
+
       <Pagination
-      style={{marginTop: "10px"}}
+        style={{ marginTop: '10px' }}
         align="end"
         pageSize={5}
         current={currentPage}

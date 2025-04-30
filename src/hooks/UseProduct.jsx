@@ -5,18 +5,19 @@ import { message } from 'antd';
 
 const UseProduct = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpenEdit, setIsOpenEdit] = React.useState(false);
   const [selectItem, setSelectItem] = React.useState(null);
   const [id, setId] = React.useState(null);
   const [currentPage, setCurrentPage] = React.useState(1);
 
   const handleOpenModal = (item) => {
     setSelectItem(item);
-    setIsOpen(true);
+    setIsOpenEdit(true);
   };
 
   const handleCancel = () => {
     setSelectItem({});
-    setIsOpen(false);
+    setIsOpenEdit(false);
   };
 
   const getCategory = async () => {
@@ -65,6 +66,8 @@ const UseProduct = () => {
     selectItem,
     currentPage,
     setCurrentPage,
+    setIsOpen,
+    isOpenEdit
   };
 };
 

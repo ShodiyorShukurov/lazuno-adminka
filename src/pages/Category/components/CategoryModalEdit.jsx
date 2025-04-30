@@ -14,13 +14,23 @@ import Api from '../../../api';
 import PropTypes from 'prop-types';
 import { useQueryClient } from '@tanstack/react-query';
 
-const CategoryModal = ({
-  isOpen,
-  setIsOpen
+const CategoryModalEdit = ({
+  isOpenEdit,
+  handleCancel,
+  selectItem,
 }) => {
   const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
+
+  React.useEffect(() => {
+    if (isOpenEdit && selectItem) {
+      form.setFieldsValue({
+        title: selectItem.title || '',
+        lang: selectItem.lang || 'ru',
+      });
+    }
+  }, [isOpenEdit, selectItem, form]);
 
   /** Upload props */
   const uploadProps = {
@@ -43,62 +53,26 @@ const CategoryModal = ({
   const onFinish = async (values) => {
     setIsLoading(true);
     const formData = new FormData();
-    formData.append('title', values.title_ru);
-    formData.append('lang', 'ru');
-    formData.append('image', fileList[0].originFileObj);
+    formData.append('title', values.title);
+    formData.append('lang', selectItem?.lang);
+    formData.append(
+      'image',
+      fileList[0]?.originFileObj ? fileList[0].originFileObj : ''
+    );
 
     try {
-      const response = await Api.post('/categories', formData);
-
-      if (response.data) {
-        onFinish2(values.title_en, values.title_uz);
-      }
-    } catch (error) {
-      message.error(
-        'Произошла ошибка при отправке данных. Пожалуйста, попробуйте снова.'
-      );
-      console.error('Ошибка:', error);
-    }
-  };
-
-  const onFinish2 = async (values1, values2) => {
-    const formData = new FormData();
-    formData.append('title', values1);
-    formData.append('lang', 'en');
-    formData.append('image', fileList[0].originFileObj);
-
-    try {
-      const response = await Api.post('/categories', formData);
-
-      if (response.data) {
-        onFinish3(values2);
-      }
-    } catch (error) {
-      message.error(
-        'Произошла ошибка при отправке данных. Пожалуйста, попробуйте снова.'
-      );
-      console.error('Ошибка:', error);
-    }
-  };
-
-  const onFinish3 = async (values) => {
-    const formData = new FormData();
-    formData.append('title', values);
-    formData.append('lang', 'uz');
-    formData.append('image', fileList[0].originFileObj);
-    try {
-      const response = await Api.post('/categories', formData);
+      const response = await Api.put(`/categories/${selectItem.id}`, formData);
 
       if (response.data) {
         setIsLoading(false);
-        message.success('Данные успешно добавлены!');
+        message.success('Данные успешно обновлены!');
       }
+
       setFileList([]);
-      setIsOpen(false);
+      handleCancel();
       form.resetFields();
       queryClient.invalidateQueries({ queryKey: ['categoryData'] });
     } catch (error) {
-      setIsLoading(false);
       message.error(
         'Произошла ошибка при отправке данных. Пожалуйста, попробуйте снова.'
       );
@@ -108,14 +82,10 @@ const CategoryModal = ({
 
   return (
     <>
-      <Button type="primary" onClick={() => setIsOpen(true)}>
-        Добавить категорию
-      </Button>
-
       <Modal
-        title="Добавить категорию"
-        open={isOpen}
-        onCancel={() => setIsOpen(false)}
+        title="Редактировать категорию"
+        open={isOpenEdit}
+        onCancel={handleCancel}
         style={{ top: 20 }}
         footer={false}
       >
@@ -126,38 +96,40 @@ const CategoryModal = ({
           autoComplete="on"
         >
           <Form.Item
-            label="Название (Русский)"
-            name="title_ru"
+            label={`Название ${
+              selectItem?.lang === 'uz'
+                ? '(Узбекский)'
+                : selectItem?.lang === 'en'
+                ? '(Английский)'
+                : '(Русский)'
+            }`}
+            name="title"
             rules={[
               { required: true, message: 'Пожалуйста, введите название!' },
             ]}
           >
             <Input />
           </Form.Item>
-          <Form.Item
-            label="Название (Английский)"
-            name="title_en"
-            rules={[
-              { required: true, message: 'Пожалуйста, введите название!' },
-            ]}
+
+          {/* <Form.Item
+            label="Язык"
+            name="lang"
+            rules={[{ required: true, message: 'Пожалуйста, выберите язык!' }]}
           >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Название (Узбекский)"
-            name="title_uz"
-            rules={[
-              { required: true, message: 'Пожалуйста, введите название!' },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+            <Select
+              options={[
+                { value: 'en', label: 'Английский' },
+                { value: 'ru', label: 'Русский' },
+                { value: 'uz', label: 'Узбекский' },
+              ]}
+            />
+          </Form.Item> */}
           <Form.Item
             label="Изображение"
             name="attachment"
             rules={[
               {
-                required: true,
+                required: selectItem?.image_url ? false : true,
                 message: 'Пожалуйста, загрузите изображение!',
               },
             ]}
@@ -172,7 +144,7 @@ const CategoryModal = ({
               <Button htmlType="submit" type="primary" disabled={isLoading}>
                 Отправить
               </Button>
-              <Button type="primary" danger onClick={() => setIsOpen(false)}>
+              <Button type="primary" danger onClick={handleCancel}>
                 Отмена
               </Button>
             </Space>
@@ -183,5 +155,10 @@ const CategoryModal = ({
   );
 };
 
+CategoryModalEdit.propTypes = {
+  isOpenEdit: PropTypes.bool.isRequired,
+  handleOpenModal: PropTypes.func.isRequired,
+  handleCancel: PropTypes.func.isRequired,
+};
 
-export default CategoryModal;
+export default CategoryModalEdit;

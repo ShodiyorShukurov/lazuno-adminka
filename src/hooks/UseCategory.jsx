@@ -5,18 +5,19 @@ import { message } from 'antd';
 
 const UseCategory = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpenEdit, setIsOpenEdit] = React.useState(false);
   const [selectItem, setSelectItem] = React.useState(null);
   const [id, setId] = React.useState(null);
   const [currentPage, setCurrentPage] = React.useState(1);
 
   const handleOpenModal = (item) => {
     setSelectItem(item);
-    setIsOpen(true);
+    setIsOpenEdit(true);
   };
 
   const handleCancel = () => {
     setSelectItem({});
-    setIsOpen(false);
+    setIsOpenEdit(false);
   };
 
   const getCategory = async () => {
@@ -30,8 +31,18 @@ const UseCategory = () => {
     }
   };
 
-  const getPopularCategories = async () => {
-    const res = await Api.get(`/categories/filter?lang=`);
+  const getPopularCategoriesRu = async () => {
+    const res = await Api.get(`/categories/filter?lang=ru`);
+    return res.data;
+  };
+
+  const getPopularCategoriesEn = async () => {
+    const res = await Api.get(`/categories/filter?lang=en`);
+    return res.data;
+  };
+
+  const getPopularCategoriesUz = async () => {
+    const res = await Api.get(`/categories/filter?lang=uz`);
     return res.data;
   };
 
@@ -59,11 +70,20 @@ const UseCategory = () => {
     queryFn: getCategory,
   });
 
-  const { data: popularData, isLoading: popularLoading } = useQuery({
-    queryKey: ['popularCategoryData'],
-    queryFn: getPopularCategories,
+  const { data: popularDataRu, isLoading: popularLoadingRu } = useQuery({
+    queryKey: ['popularCategoryDataRu'],
+    queryFn: getPopularCategoriesRu,
   });
 
+  const { data: popularDataEn, isLoading: popularLoadingEn } = useQuery({
+    queryKey: ['popularCategoryDataEn'],
+    queryFn: getPopularCategoriesEn,
+  });
+
+  const { data: popularDataUz, isLoading: popularLoadingUz } = useQuery({
+    queryKey: ['popularCategoryDataUz'],
+    queryFn: getPopularCategoriesUz,
+  });
 
   return {
     data,
@@ -76,7 +96,12 @@ const UseCategory = () => {
     selectItem,
     currentPage,
     setCurrentPage,
-    popularData
+    popularDataRu,
+    popularDataUz,
+    popularDataEn,
+    isOpenEdit,
+    setIsOpenEdit,
+    setIsOpen,
   };
 };
 
